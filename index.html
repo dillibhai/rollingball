@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rollingdiv</title>
+</head>
+<body>
+    <div class="maindiv" style="height: 500px; width: 550px; margin-left: 30%; margin-top: 5%; position: relative;">
+    <canvas width="500" height="500" style="border: 3px solid blue; position: absolute; margin: auto;" id="box">
+        
+    </canvas>
+    <div style="float: right; color: white; ">
+
+        <div style="display: none;">Radius = <input id="rad" type="text" value="50"></div><br>
+        <div style="display: none;">Position = <input id="pos_x" type="text" value="250"><b></b> +
+         <input id ="pos_y" type="text" value="250"></div><b></b><br>
+
+        <div style="display: none;">Velocity = <input  id="vel_x" type="text" value="200"><b></b> + 
+        <input id="vel_y" type="text" value="300"></div><b></b><br>
+
+       <div style="float: left; "> <input id="start_stop_button" type="button" value = "Start" onclick="start_stop();"></div>
+    </div>
+    </div>
+</body>
+<script type="text/javascript">
+    var ctx = document.getElementById("box").getContext("2d");
+    var pos = [undefined, undefined];
+    var vel=[undefined, undefined];
+    var rad;
+    var started = false;
+    var i_id;
+    function draw_and_update(){
+        ctx.fillStyle = "orange";
+        ctx.clearRect(0,0,500,500);
+        ctx.beginPath();
+        ctx.arc(pos[0], pos[1], rad, 0, 2*Math.PI);
+        ctx.fill();
+        if(pos[0]+rad>=500 || pos[0]-rad<=0){
+            vel[0]=-vel[0];
+        }if(pos[1]+rad>=500 || pos[1]-rad<=0){
+            vel[1]=-vel[1];
+        }
+
+        pos[0]+=vel[0]/60;
+        pos[1]+=vel[1]/60;
+    }
+    function start_stop(){
+        if(started){
+            clearInterval(i_id)
+            document.getElementById("start_stop_button").value ="Start";
+        }else{
+            pos[0] = Number(document.getElementById("pos_x").value);
+            pos[1] = Number(document.getElementById("pos_y").value);
+            vel[0] = Number(document.getElementById("vel_x").value);
+            vel[1]= Number(document.getElementById("vel_y").value);
+            rad = Number(document.getElementById("rad").value);
+            document.getElementById("start_stop_button").value ="Stop";
+           i_id = setInterval(draw_and_update, 1000/60);
+        }
+        started = !started;
+    }
+</script>
+</html>
